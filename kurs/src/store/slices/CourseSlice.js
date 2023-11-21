@@ -15,8 +15,15 @@ const courseSlice = createSlice({
         id: nanoid(),
       });
     },
+    deleteCourse(state, action) {
+      let updatedData = state.data.filter((course) => {
+        return course.id != action.payload;
+      });
+      state.data = updatedData;
+    },
+    
   },
 });
 
 export const courseReducer = courseSlice.reducer;
-export const { addCourse } = courseSlice.actions;
+export const { addCourse, deleteCourse } = courseSlice.actions;

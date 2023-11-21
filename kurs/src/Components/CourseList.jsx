@@ -1,8 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-
+import { useDispatch } from "react-redux";
+import { deleteCourse } from "../store/slices/CourseSlice";
 const CourseList = () => {
+  const dispatch=useDispatch()
   const courses = useSelector((state) => {
     return state.courses.data;
   });
@@ -13,7 +14,7 @@ const CourseList = () => {
         <h1>{course.name}</h1>
         <p>{course.description}</p>
         <p>{course.configureStore}</p>
-        <button className="button is-danger">Sil</button>
+        <button  onClick={()=>dispatch(deleteCourse(course.id))} className="button is-danger">Sil</button>
       </div>
     );
   });
