@@ -1,24 +1,41 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addCourse } from "../store/slices/CourseSlice";
-import {
-  changeName,
-  changeDescription,
-  changeCost,
-} from "../store/slices/FormSlice";
+import { useEffect } from "react";
+
+const initialState = {
+  name: "",
+  description: "",
+  cost: 0,
+};
 const CourseForm = () => {
-  const dispatch = useDispatch();
-  const { name, description, cost } = useSelector((state) => {
-    return {
-      name: state.form.name,
-      description: state.form.description,
-      cost: state.form.cost,
-    };
+  const course = useSelector((state) => {
+    return state.courses.updateData;
   });
+ 
+
+  const [state, setState] = useState(initialState);
+  const dispatch = useDispatch();
+  //
+  const handleChaneInput = (e) => {
+    const { name, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  //
+  useEffect(() => {
+    if (course) {
+      setState(course);
+    }
+  }, [course]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addCourse({ name, description, cost }));
+    dispatch(addCourse(state));
+    setState(initialState);
   };
+
   return (
     <div className="courseForm panel">
       <h4 className="subtitle is-3">Kurs Ekle</h4>
@@ -27,9 +44,10 @@ const CourseForm = () => {
           <div className="field">
             <label className="label">Ad</label>
             <input
-              value={name}
+              value={state.name}
+              name="name"
               onChange={(e) => {
-                dispatch(changeName(e.target.value));
+                handleChaneInput(e);
               }}
               className="input is-expended"
             />
@@ -37,9 +55,10 @@ const CourseForm = () => {
           <div className="field">
             <label className="label">Aciklama</label>
             <textarea
-              value={description}
+              value={state.description}
+              name="description"
               onChange={(e) => {
-                dispatch(changeDescription(e.target.value));
+                handleChaneInput(e);
               }}
               className="input is-expended"
             />
@@ -47,9 +66,10 @@ const CourseForm = () => {
           <div className="field">
             <label className="label">Fiyat</label>
             <input
-              value={cost}
+              value={state.cost}
+              name="cost"
               onChange={(e) => {
-                dispatch(changeCost(parseInt(e.target.value)));
+                handleChaneInput(e);
               }}
               type="number"
               className="input is-expended"
