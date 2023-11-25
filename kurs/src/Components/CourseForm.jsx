@@ -12,17 +12,12 @@ const CourseForm = () => {
   const course = useSelector((state) => {
     return state.courses.updateData;
   });
- 
-
   const [state, setState] = useState(initialState);
   const dispatch = useDispatch();
   //
   const handleChaneInput = (e) => {
     const { name, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setState((prevState) => ({ ...prevState, [name]: !isNaN(value) ? +value : value }));
   };
   //
   useEffect(() => {

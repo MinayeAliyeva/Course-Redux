@@ -3,27 +3,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse, updateData } from "../store/slices/CourseSlice";
 const CourseList = () => {
   const dispatch = useDispatch();
-  const { courses } = useSelector((state) => {
-    // console.log(state);
-    const filteredCourses = state.courses.data.filter((course) => {
-     return  course.name
-        .toLowerCase()
-        .includes(state.courses.searchTerm.toLowerCase());
-    });
+  // const { courses } = useSelector((state) => {
+  //   const filteredCourses = state.courses.data.filter((course) => {
+  //     return course.name
+  //       .toLowerCase()
+  //       .includes(state.courses.searchTerm.toLowerCase());
+  //   });
+  //   return {
+  //     courses: filteredCourses,
+  //   };
+  // });
+  const { courses } = useSelector(({ courses: { data, searchTerm } }) => {
+    const filteredCourses = data.filter((course) =>
+      course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     return {
       courses: filteredCourses,
     };
-    return state.courses.data;
   });
-
-  // console.log(courses);
-  // console.log(courses);
   const renderedCourses = courses.map((course) => {
     return (
       <div className="panel" key={course.id}>
         <h1>{course.name}</h1>
         <p>{course.description}</p>
-        <p>{course.const}</p>
+        <p>{course.cost}</p>
         <button
           onClick={() => dispatch(deleteCourse(course.id))}
           className="button is-danger"
