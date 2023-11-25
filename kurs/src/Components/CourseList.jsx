@@ -3,11 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteCourse, updateData } from "../store/slices/CourseSlice";
 const CourseList = () => {
   const dispatch = useDispatch();
-  const courses = useSelector((state) => {
-    // console.log(state.up);
+  const { courses } = useSelector((state) => {
+    // console.log(state);
+    const filteredCourses = state.courses.data.filter((course) => {
+     return  course.name
+        .toLowerCase()
+        .includes(state.courses.searchTerm.toLowerCase());
+    });
+    return {
+      courses: filteredCourses,
+    };
     return state.courses.data;
-
   });
+
+  // console.log(courses);
   // console.log(courses);
   const renderedCourses = courses.map((course) => {
     return (
